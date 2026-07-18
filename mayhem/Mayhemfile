@@ -1,0 +1,16 @@
+# Mayhem target: google/tangent — automatic differentiation by source-code
+# transformation (Atheris/libFuzzer harness). The cmd binary is the compiled
+# ELF launcher that drives mayhem/fuzz_deriv.py on the pinned CPython 3.7;
+# Atheris instruments the tangent library so the run records coverage (edges).
+project: savantenvs/tangent
+target: fuzz-deriv
+
+cmds:
+  - cmd: /mayhem/fuzz-deriv
+    libfuzzer: true
+    timeout: 30
+
+# Seed corpus: differentiable Python functions (source text).
+testsuite:
+  - https://$MAYHEM_DOMAIN/$MAYHEM_PROJECT/$MAYHEM_TARGET/testsuite.tar
+  - file://mayhem/fuzz-deriv/testsuite
